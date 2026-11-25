@@ -8,9 +8,8 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const styles: Record<Variant, string> = {
-  primary: 'bg-slate-900 text-white hover:bg-slate-800 disabled:bg-slate-400',
-  secondary:
-    'border border-slate-300 bg-white text-slate-900 hover:bg-slate-100 disabled:text-slate-400',
+  primary: 'bg-oud text-white hover:bg-oud/90 disabled:bg-muted/50',
+  secondary: 'border border-line bg-white text-ink hover:bg-oud-soft disabled:text-muted/50',
 };
 
 /** 44px minimum height: comfortable to tap with a thumb. */
@@ -26,7 +25,7 @@ export function Button({
     <button
       {...rest}
       disabled={disabled || loading}
-      className={`inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-base font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 disabled:cursor-not-allowed ${styles[variant]} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-base font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oud disabled:cursor-not-allowed ${styles[variant]} ${className}`}
     >
       {loading ? 'Please wait…' : children}
     </button>

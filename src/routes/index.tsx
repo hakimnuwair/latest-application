@@ -1,22 +1,42 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { NotFound } from '../components/NotFound';
-import { AdminLayout } from '../features/admin/AdminLayout';
-import { DashboardPage } from '../features/admin/DashboardPage';
-import { LoginPage } from '../features/auth/LoginPage';
-import { HomePage } from '../features/catalog/HomePage';
+import { CatalogPage } from '../features/catalog/CatalogPage';
+import { ProductPage } from '../features/catalog/ProductPage';
 import { AdminGuard } from './AdminGuard';
 
 export const router = createBrowserRouter([
   // Public
-  { path: '/', element: <HomePage /> },
-  { path: '/admin/login', element: <LoginPage /> },
+  { path: '/', element: <CatalogPage /> },
+  { path: '/products/:slug', element: <ProductPage /> },
+  {
+    path: '/admin/login',
+    lazy: async () => {
+      const { LoginPage } = await import('../features/auth/LoginPage');
+      return { Component: LoginPage };
+    },
+  },
 
   // Admin: everything below is behind the guard. New admin screens are added as children here.
   {
     path: '/admin',
     element: <AdminGuard />,
     children: [
-      { element: <AdminLayout />, children: [{ index: true, element: <DashboardPage /> }] },
+      {
+        // Loaded only when the owner opens /admin, so shoppers never download admin code.
+        lazy: async () => {
+          const { AdminLayout } = await import('../features/admin/AdminLayout');
+          return { Component: AdminLayout };
+        },
+        children: [
+          {
+            index: true,
+            lazy: async () => {
+              const { DashboardPage } = await import('../features/admin/DashboardPage');
+              return { Component: DashboardPage };
+            },
+          },
+        ],
+      },
     ],
   },
 

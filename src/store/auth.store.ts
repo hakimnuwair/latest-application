@@ -9,6 +9,8 @@ export type AuthStatus = 'loading' | 'authenticated' | 'anonymous';
 interface AuthState {
   status: AuthStatus;
   user: AuthUser | null;
+  /** True once the owner has been signed in during this visit (used to tell "session ended" from "stranger"). */
+  wasSignedIn: boolean;
   /** Runs once when the app starts. */
   restore: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
@@ -18,11 +20,12 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   status: 'loading',
   user: null,
+  wasSignedIn: false,
 
   restore: async () => {
     try {
       const session = await restoreSession();
-      set({ status: 'authenticated', user: session.user });
+      set({ status: 'authenticated', user: session.user, wasSignedIn: true });
     } catch {
       set({ status: 'anonymous', user: null });
     }
@@ -30,7 +33,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   login: async (email, password) => {
     const session = await loginRequest(email, password);
-    set({ status: 'authenticated', user: session.user });
+    set({ status: 'authenticated', user: session.user, wasSignedIn: true });
   },
 
   logout: async () => {

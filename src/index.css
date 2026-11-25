@@ -1,10 +1,39 @@
+@import '@fontsource-variable/manrope';
+@import '@fontsource/instrument-serif';
 @import 'tailwindcss';
+
+/* Design tokens. One place to change the look of the whole app. */
+@theme {
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+
+  --color-ink: #14181f; /* text, dark surfaces */
+  --color-mist: #f4f5f6; /* page background */
+  --color-plinth: #e8eaed; /* backdrop behind product photos */
+  --color-line: #d9dde2; /* borders */
+  --color-muted: #566070; /* secondary text (AA on mist) */
+  --color-oud: #1f3a34; /* primary actions, selected state */
+  --color-oud-soft: #e1ebe8; /* tint of the primary colour */
+  --color-brass: #85601d; /* prices (AA on mist) */
+}
 
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+    scroll-padding-top: 6rem;
   }
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    @apply bg-mist font-sans text-ink antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-oud);
+    outline-offset: 2px;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

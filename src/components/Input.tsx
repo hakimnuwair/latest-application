@@ -13,7 +13,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
   const inputId = id ?? rest.name ?? label;
   return (
     <div className="space-y-1">
-      <label htmlFor={inputId} className="block text-sm font-medium text-slate-700">
+      <label htmlFor={inputId} className="block text-sm font-medium text-ink/80">
         {label}
       </label>
       <input
@@ -21,8 +21,8 @@ export const Input = forwardRef<HTMLInputElement, Props>(function Input(
         id={inputId}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${inputId}-error` : undefined}
-        className={`block min-h-11 w-full rounded-lg border bg-white px-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-slate-900 focus:outline-2 focus:outline-slate-900 ${
-          error ? 'border-red-500' : 'border-slate-300'
+        className={`block min-h-11 w-full rounded-lg border bg-white px-3 text-base text-ink placeholder:text-muted focus:border-oud focus:outline-2 focus:outline-oud ${
+          error ? 'border-red-500' : 'border-line'
         } ${className}`}
         {...rest}
       />

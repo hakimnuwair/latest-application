@@ -7,6 +7,8 @@ import { errorMessage } from '../../api/errors';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { useAuth } from '../../hooks/useAuth';
+import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import { useNoIndex } from '../../hooks/useNoIndex';
 
 const loginSchema = z.object({
   email: z.string().trim().min(1, 'Enter your email').pipe(z.email('Enter a valid email')),
@@ -19,6 +21,8 @@ interface LocationState {
 }
 
 export function LoginPage() {
+  useNoIndex();
+  useDocumentTitle('Sign in');
   const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,13 +56,13 @@ export function LoginPage() {
       <div className="w-full max-w-sm space-y-6">
         <header className="space-y-1 text-center">
           <h1 className="text-2xl font-semibold">Shop admin</h1>
-          <p className="text-sm text-slate-600">Sign in to manage stock, sales and accounts.</p>
+          <p className="text-sm text-muted">Sign in to manage stock, sales and accounts.</p>
         </header>
 
         <form
           onSubmit={onSubmit}
           noValidate
-          className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+          className="space-y-4 rounded-2xl border border-line bg-white p-5 shadow-sm"
         >
           {serverError ? (
             <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -87,7 +91,7 @@ export function LoginPage() {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="min-h-11 text-sm text-slate-600 underline"
+              className="min-h-11 text-sm text-muted underline"
             >
               {showPassword ? 'Hide password' : 'Show password'}
             </button>
