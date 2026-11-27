@@ -15,3 +15,16 @@ export const rupeesToPaise = (text: string): number | null => {
   const [whole = '0', fraction = ''] = clean.split('.');
   return Number(whole) * 100 + Number(fraction.padEnd(2, '0'));
 };
+
+/** The API stores money in a 32-bit integer of paise: the most it accepts. */
+export const MAX_PAISE = 2_147_483_647;
+
+/** For forms: true when the text is a valid, in-range rupee amount ("1250", "1250.5"). */
+export const isMoneyText = (text: string): boolean => {
+  const paise = rupeesToPaise(text);
+  return paise !== null && paise <= MAX_PAISE;
+};
+
+/** Paise -> text to put in a MoneyInput when editing: 125000 -> "1250", 125050 -> "1250.50". */
+export const paiseToRupeesText = (paise: number): string =>
+  paise % 100 === 0 ? String(paise / 100) : (paise / 100).toFixed(2);

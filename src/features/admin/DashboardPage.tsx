@@ -1,45 +1,33 @@
-import { useEffect, useState } from 'react';
-import { fetchMe } from '../../api/auth';
-import { errorMessage } from '../../api/errors';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { adminNav } from './nav';
 
-type Check =
-  { state: 'checking' } | { state: 'ok'; email: string } | { state: 'failed'; message: string };
-
-/** Placeholder home. The "session check" proves the token and the automatic refresh work end to end. */
+/** Home. Quick links for now; the numbers (sales, profit, money in hand) arrive in part 12c-3. */
 export function DashboardPage() {
+  useDocumentTitle('Home');
   const { user } = useAuth();
-  const [check, setCheck] = useState<Check>({ state: 'checking' });
-
-  useEffect(() => {
-    let cancelled = false;
-    fetchMe()
-      .then((me) => !cancelled && setCheck({ state: 'ok', email: me.email }))
-      .catch(
-        (error: unknown) =>
-          !cancelled && setCheck({ state: 'failed', message: errorMessage(error) }),
-      );
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const links = adminNav.filter((item) => item.to !== '/admin');
 
   return (
-    <section className="space-y-4">
-      <h1 className="text-xl font-semibold">Dashboard</h1>
-      <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
-        <p className="text-sm text-muted">Signed in as</p>
-        <p className="font-medium">{user?.email}</p>
-        <p className="mt-3 text-sm text-muted">Server session check</p>
-        <p className="text-sm" role="status">
-          {check.state === 'checking' && 'Checking…'}
-          {check.state === 'ok' && `Connected as ${check.email}`}
-          {check.state === 'failed' && <span className="text-red-600">{check.message}</span>}
-        </p>
-      </div>
-      <p className="text-sm text-muted">
-        Products, sales, purchases, expenses and reports screens arrive in the next steps.
-      </p>
+    <section>
+      <PageHeader title="Welcome" description={user?.email} />
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {links.map((item) => (
+          <li key={item.to}>
+            <Link
+              to={item.to}
+              className="flex min-h-20 items-center gap-3 rounded-2xl border border-line bg-white p-4 transition hover:border-oud/40 hover:bg-oud-soft"
+            >
+              <span className="grid size-11 place-items-center rounded-xl bg-oud-soft text-oud">
+                <item.icon />
+              </span>
+              <span className="font-semibold">{item.label}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

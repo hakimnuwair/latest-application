@@ -35,6 +35,42 @@ export const router = createBrowserRouter([
               return { Component: DashboardPage };
             },
           },
+          // Step 12c-1: stock. Later parts add their routes below, one block per screen.
+          {
+            path: 'categories',
+            lazy: async () => {
+              const { CategoriesPage } = await import('../features/categories/CategoriesPage');
+              return { Component: CategoriesPage };
+            },
+          },
+          {
+            path: 'products',
+            lazy: async () => {
+              const { ProductsPage } = await import('../features/products/ProductsPage');
+              return { Component: ProductsPage };
+            },
+          },
+          {
+            path: 'products/new',
+            lazy: async () => {
+              const { ProductFormPage } = await import('../features/products/ProductFormPage');
+              return { Component: ProductFormPage };
+            },
+          },
+          {
+            path: 'products/:id',
+            lazy: async () => {
+              const { ProductFormPage } = await import('../features/products/ProductFormPage');
+              return { Component: ProductFormPage };
+            },
+          },
+          {
+            path: 'inventory',
+            lazy: async () => {
+              const { InventoryPage } = await import('../features/inventory/InventoryPage');
+              return { Component: InventoryPage };
+            },
+          },
         ],
       },
     ],

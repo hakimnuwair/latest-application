@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes } from 'react';
 
-type Variant = 'primary' | 'secondary';
+type Variant = 'primary' | 'secondary' | 'danger' | 'ghost';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
@@ -10,6 +10,8 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 const styles: Record<Variant, string> = {
   primary: 'bg-oud text-white hover:bg-oud/90 disabled:bg-muted/50',
   secondary: 'border border-line bg-white text-ink hover:bg-oud-soft disabled:text-muted/50',
+  danger: 'bg-red-700 text-white hover:bg-red-800 disabled:bg-muted/50',
+  ghost: 'text-ink hover:bg-oud-soft disabled:text-muted/50',
 };
 
 /** 44px minimum height: comfortable to tap with a thumb. */

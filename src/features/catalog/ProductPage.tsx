@@ -1,12 +1,12 @@
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { errorMessage } from '../../api/errors';
+import { errorMessage, isNotFound } from '../../api/errors';
 import { ChevronLeftIcon } from '../../components/icons';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { formatINR } from '../../utils/money';
 import { CatalogShell } from './components/CatalogShell';
 import { Gallery } from './components/Gallery';
-import { RetryButton, StateMessage } from './components/States';
-import { isNotFound, usePublicProduct } from './queries';
+import { RetryButton, StateMessage } from '../../components/StateMessage';
+import { usePublicProduct } from './queries';
 
 export function ProductPage() {
   const { slug = '' } = useParams();

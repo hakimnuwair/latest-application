@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+import { isNotFound } from '../../api/errors';
 import {
   fetchPublicCategories,
   fetchPublicProduct,
@@ -8,10 +8,6 @@ import {
 } from '../../api/public';
 
 const MINUTE = 60_000;
-
-/** A missing product is final: do not retry a 404. Anything else gets one more try. */
-export const isNotFound = (error: unknown): boolean =>
-  isAxiosError(error) && error.response?.status === 404;
 
 export const usePublicProducts = (params: ProductListParams) =>
   useQuery({

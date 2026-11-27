@@ -1,19 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useRef } from 'react';
 import { Button } from '../../components/Button';
 import { errorMessage } from '../../api/errors';
+import { Pagination } from '../../components/ui/Pagination';
+import { SearchBox } from '../../components/ui/SearchBox';
+import { RetryButton, StateMessage } from '../../components/StateMessage';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import { useListParams, useSearchInput } from '../../hooks/useListParams';
 import { CategoryChips } from './components/CategoryChips';
 import { CatalogShell } from './components/CatalogShell';
-import { Pagination } from './components/Pagination';
 import { ProductCard, ProductCardSkeleton } from './components/ProductCard';
-import { SearchBox } from './components/SearchBox';
-import { RetryButton, StateMessage } from './components/States';
 import { usePublicCategories, usePublicProducts } from './queries';
 
 // 12 divides evenly into the 2, 3 and 4 column layouts, so the last row is never half empty.
 const PAGE_SIZE = 12;
-const SEARCH_DELAY_MS = 350;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
@@ -22,49 +21,19 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  */
 export function CatalogPage() {
   useDocumentTitle();
-  const [params, setParams] = useSearchParams();
-  const q = (params.get('q') ?? '').trim();
-  const rawCategory = params.get('category') ?? '';
-  const categoryId = UUID.test(rawCategory) ? rawCategory : '';
-  const page = Math.max(1, Number.parseInt(params.get('page') ?? '1', 10) || 1);
+  const { page, values, set, clear } = useListParams(['q', 'category']);
+  const q = values.q;
+  const categoryId = UUID.test(values.category) ? values.category : '';
 
-  const [text, setText] = useState(q);
-  const timer = useRef<number | undefined>(undefined);
   const gridTop = useRef<HTMLDivElement>(null);
-  useEffect(() => () => window.clearTimeout(timer.current), []);
+  const search = useSearchInput(q, (value) => set({ q: value }, true));
 
-  /** Change filters in the URL. Any filter change goes back to page 1. */
-  const update = (changes: Record<string, string>, replace: boolean) => {
-    setParams(
-      (prev) => {
-        const next = new URLSearchParams(prev);
-        if (!('page' in changes)) next.delete('page');
-        for (const [key, value] of Object.entries(changes)) {
-          if (value) next.set(key, value);
-          else next.delete(key);
-        }
-        return next;
-      },
-      { replace },
-    );
-  };
-
-  const typeSearch = (value: string) => {
-    setText(value);
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => update({ q: value.trim() }, true), SEARCH_DELAY_MS);
-  };
-  const submitSearch = () => {
-    window.clearTimeout(timer.current);
-    update({ q: text.trim() }, true);
-  };
   const clearFilters = () => {
-    window.clearTimeout(timer.current);
-    setText('');
-    update({ q: '', category: '' }, true);
+    search.reset();
+    clear();
   };
   const goToPage = (next: number) => {
-    update({ page: next > 1 ? String(next) : '' }, false);
+    set({ page: next > 1 ? String(next) : '' });
     gridTop.current?.scrollIntoView({ block: 'start' });
   };
 
@@ -87,14 +56,14 @@ export function CatalogPage() {
       {/* Stays at the top while scrolling, so search and categories are always one tap away. */}
       <div className="sticky top-0 z-10 -mx-4 mt-4 space-y-3 border-b border-line bg-mist/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:flex lg:items-center lg:gap-6 lg:space-y-0">
         <div className="lg:w-80 lg:shrink-0">
-          <SearchBox value={text} onChange={typeSearch} onSubmit={submitSearch} />
+          <SearchBox value={search.text} onChange={search.onChange} onSubmit={search.submit} />
         </div>
         {categories.data && categories.data.length > 0 ? (
           <div className="min-w-0 lg:flex-1">
             <CategoryChips
               categories={categories.data}
               selectedId={categoryId}
-              onSelect={(id) => update({ category: id }, false)}
+              onSelect={(id) => set({ category: id })}
             />
           </div>
         ) : null}

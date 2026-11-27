@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import type { PublicMedia } from '../../../api/public';
 import { ChevronLeftIcon, ChevronRightIcon, PlayIcon } from '../../../components/icons';
 import { videoPoster } from '../../../utils/media';
-import { MediaThumb } from './MediaThumb';
+import { MediaThumb } from '../../../components/MediaThumb';
 
 interface Props {
   media: PublicMedia[];

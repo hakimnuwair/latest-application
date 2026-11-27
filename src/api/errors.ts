@@ -13,3 +13,7 @@ export const errorMessage = (error: unknown): string => {
   }
   return 'Something went wrong. Try again.';
 };
+
+/** True when the server answered 404 (the thing does not exist). */
+export const isNotFound = (error: unknown): boolean =>
+  isAxiosError(error) && error.response?.status === 404;

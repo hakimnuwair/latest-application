@@ -3,7 +3,7 @@ import type { PublicProduct } from '../../../api/public';
 import { PlayIcon } from '../../../components/icons';
 import { coverOf } from '../../../utils/media';
 import { formatINR } from '../../../utils/money';
-import { MediaThumb } from './MediaThumb';
+import { MediaThumb } from '../../../components/MediaThumb';
 
 /** The photo is the hero of the card; text stays quiet underneath. A hidden price simply is not shown. */
 export function ProductCard({ product }: { product: PublicProduct }) {
