@@ -26,7 +26,7 @@ export function Segmented<T extends string>({ value, options, onChange, ariaLabe
             type="button"
             aria-pressed={on}
             onClick={() => onChange(option.value)}
-            className={`min-h-9 rounded-lg px-4 text-sm font-semibold transition ${
+            className={`min-h-11 rounded-lg px-4 text-sm font-semibold transition ${
               on ? 'bg-oud text-white' : 'text-ink hover:bg-oud-soft'
             }`}
           >

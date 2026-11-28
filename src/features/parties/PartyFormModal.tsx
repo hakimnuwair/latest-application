@@ -66,7 +66,15 @@ function PartyFormBody({ config, party, onClose, onSaved }: Omit<Props, 'open'>)
   });
 
   return (
-    <form onSubmit={(e) => void onSubmit(e)} noValidate className="space-y-4">
+    <form
+      onSubmit={(e) => {
+        // Never let this submit reach a form that this dialog was opened from (the sale screen).
+        e.stopPropagation();
+        void onSubmit(e);
+      }}
+      noValidate
+      className="space-y-4"
+    >
       <Input
         label="Name"
         autoFocus

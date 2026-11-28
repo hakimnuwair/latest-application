@@ -20,5 +20,5 @@ export const customersConfig: PartyConfig = {
   chargeEntryLabel: 'Sale',
   afterText: (paise) =>
     paise > 0 ? `${formatINR(paise)} still to collect` : 'This customer is all settled',
-  // chargeLink: added in 12c-2b, when /admin/sales/:id exists.
+  chargeLink: (refId) => `/admin/sales/${refId}`,
 };

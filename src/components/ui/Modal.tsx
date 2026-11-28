@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { XIcon } from '../icons';
 
 interface Props {
@@ -28,7 +29,9 @@ export function Modal({ open, title, onClose, children, footer, dismissible = tr
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
-  return (
+  // Rendered in the page body so a dialog opened from inside a <form> (for example "add customer" on the sale
+  // screen) is never a form nested in a form.
+  return createPortal(
     <dialog
       ref={ref}
       aria-labelledby={titleId}
@@ -65,6 +68,7 @@ export function Modal({ open, title, onClose, children, footer, dismissible = tr
           ) : null}
         </div>
       ) : null}
-    </dialog>
+    </dialog>,
+    document.body,
   );
 }

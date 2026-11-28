@@ -162,3 +162,11 @@ export const PhoneIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" />
   </svg>
 );
+
+export const CartIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="9" cy="20" r="1.4" />
+    <circle cx="18" cy="20" r="1.4" />
+    <path d="M3 4h2.2l2.3 10.2a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.1L20.5 8H6.2" />
+  </svg>
+);
