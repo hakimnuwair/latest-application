@@ -35,6 +35,37 @@ export const router = createBrowserRouter([
               return { Component: DashboardPage };
             },
           },
+          // Step 12c-2a: customers and suppliers, each with its ledger.
+          {
+            path: 'customers',
+            lazy: async () => {
+              const { CustomersPage } = await import('../features/customers/CustomersPage');
+              return { Component: CustomersPage };
+            },
+          },
+          {
+            path: 'customers/:id',
+            lazy: async () => {
+              const { CustomerLedgerPage } =
+                await import('../features/customers/CustomerLedgerPage');
+              return { Component: CustomerLedgerPage };
+            },
+          },
+          {
+            path: 'suppliers',
+            lazy: async () => {
+              const { SuppliersPage } = await import('../features/suppliers/SuppliersPage');
+              return { Component: SuppliersPage };
+            },
+          },
+          {
+            path: 'suppliers/:id',
+            lazy: async () => {
+              const { SupplierLedgerPage } =
+                await import('../features/suppliers/SupplierLedgerPage');
+              return { Component: SupplierLedgerPage };
+            },
+          },
           // Step 12c-1: stock. Later parts add their routes below, one block per screen.
           {
             path: 'categories',

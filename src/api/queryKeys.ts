@@ -10,6 +10,12 @@ export const keys = {
   media: (productId: string) => ['admin', 'media', productId] as const,
   inventory: ['admin', 'inventory'] as const,
   movements: ['admin', 'movements'] as const,
+  customers: ['admin', 'customers'] as const,
+  suppliers: ['admin', 'suppliers'] as const,
+  /** One customer's or supplier's ledger: ['admin', 'ledger', kind, id, page]. */
+  ledger: (kind: 'customer' | 'supplier', id: string) => ['admin', 'ledger', kind, id] as const,
+  /** Reports and the dashboard (built in 12c-3). Changes to money invalidate them already. */
+  reports: ['admin', 'reports'] as const,
   /** The public shop pages (catalog, product page, categories). */
   public: ['public'] as const,
 };
@@ -39,4 +45,22 @@ export const invalidateStock = (qc: QueryClient) =>
     qc.invalidateQueries({ queryKey: keys.movements }),
     qc.invalidateQueries({ queryKey: keys.products }),
     qc.invalidateQueries({ queryKey: keys.public }),
+  ]);
+
+/** A customer or supplier was added, edited or deleted, or a payment changed what they owe. */
+export const invalidateParties = (qc: QueryClient, kind?: 'customer' | 'supplier') =>
+  Promise.all([
+    ...(kind !== 'supplier' ? [qc.invalidateQueries({ queryKey: keys.customers })] : []),
+    ...(kind !== 'customer' ? [qc.invalidateQueries({ queryKey: keys.suppliers })] : []),
+  ]);
+
+/**
+ * A payment was recorded, edited or deleted: the party's balance, its ledger, and the reports and dashboard
+ * (money in hand) all change.
+ */
+export const invalidateLedger = (qc: QueryClient, kind: 'customer' | 'supplier', id: string) =>
+  Promise.all([
+    qc.invalidateQueries({ queryKey: keys.ledger(kind, id) }),
+    invalidateParties(qc, kind),
+    qc.invalidateQueries({ queryKey: keys.reports }),
   ]);

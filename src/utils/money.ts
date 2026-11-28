@@ -1,12 +1,20 @@
 /** Money arrives from the API in paise (integers). Only this file converts it for display. */
-const inr = new Intl.NumberFormat('en-IN', {
+const inrWhole = new Intl.NumberFormat('en-IN', {
   style: 'currency',
   currency: 'INR',
   minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+const inrExact = new Intl.NumberFormat('en-IN', {
+  style: 'currency',
+  currency: 'INR',
+  minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
 
-export const formatINR = (paise: number): string => inr.format(paise / 100);
+/** 125000 -> "₹1,250"; 125050 -> "₹1,250.50" (never "₹1,250.5"). */
+export const formatINR = (paise: number): string =>
+  paise % 100 === 0 ? inrWhole.format(paise / 100) : inrExact.format(paise / 100);
 
 /** "1250.50" typed by the user -> 125050 paise. Returns null for anything that is not a valid amount. */
 export const rupeesToPaise = (text: string): number | null => {
