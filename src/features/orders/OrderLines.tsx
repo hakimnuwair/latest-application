@@ -236,6 +236,9 @@ export function OrderLines({
                     ) : null}
                   </div>
                   <MoneyInput
+                    // Each row needs its own id: two rows share the same label, and a repeated id would
+                    // make the second label point at the first row's box.
+                    id={`price-${line.productId}`}
                     label={priceLabel}
                     value={line.price}
                     disabled={disabled}

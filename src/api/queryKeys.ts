@@ -15,6 +15,7 @@ export const keys = {
   /** One customer's or supplier's ledger: ['admin', 'ledger', kind, id, page]. */
   ledger: (kind: 'customer' | 'supplier', id: string) => ['admin', 'ledger', kind, id] as const,
   sales: ['admin', 'sales'] as const,
+  purchases: ['admin', 'purchases'] as const,
   /** Reports and the dashboard (built in 12c-3). Changes to money invalidate them already. */
   reports: ['admin', 'reports'] as const,
   /** The public shop pages (catalog, product page, categories). */
@@ -76,4 +77,16 @@ export const invalidateSales = (qc: QueryClient, customerId?: string | null) =>
     invalidateStock(qc),
     qc.invalidateQueries({ queryKey: keys.reports }),
     customerId ? invalidateLedger(qc, 'customer', customerId) : invalidateParties(qc, 'customer'),
+  ]);
+
+/**
+ * A purchase was saved. It changes stock and average cost, the purchases list, what you owe the supplier
+ * (balance and ledger) and the reports (money in hand, profit), so all of those refresh.
+ */
+export const invalidatePurchases = (qc: QueryClient, supplierId?: string | null) =>
+  Promise.all([
+    qc.invalidateQueries({ queryKey: keys.purchases }),
+    invalidateStock(qc),
+    qc.invalidateQueries({ queryKey: keys.reports }),
+    supplierId ? invalidateLedger(qc, 'supplier', supplierId) : invalidateParties(qc, 'supplier'),
   ]);

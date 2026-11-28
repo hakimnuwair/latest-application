@@ -20,5 +20,5 @@ export const suppliersConfig: PartyConfig = {
   chargeEntryLabel: 'Purchase',
   afterText: (paise) =>
     paise > 0 ? `You still owe ${formatINR(paise)}` : 'This supplier is all settled',
-  // chargeLink: added in 12c-2c, when /admin/purchases/:id exists.
+  chargeLink: (refId) => `/admin/purchases/${refId}`,
 };

@@ -1,6 +1,7 @@
 import type { ComponentType, SVGProps } from 'react';
 import {
   CartIcon,
+  ReceiptIcon,
   HomeIcon,
   PackageIcon,
   StackIcon,
@@ -28,6 +29,7 @@ export const adminNav: readonly NavItem[] = [
   { to: '/admin', label: 'Home', icon: HomeIcon, section: 'Home', end: true, mobile: true },
   { to: '/admin/sales', label: 'Sales', icon: CartIcon, section: 'Sales', mobile: true },
   { to: '/admin/customers', label: 'Customers', icon: UsersIcon, section: 'Sales' },
+  { to: '/admin/purchases', label: 'Purchases', icon: ReceiptIcon, section: 'Buying' },
   { to: '/admin/suppliers', label: 'Suppliers', icon: TruckIcon, section: 'Buying' },
   { to: '/admin/products', label: 'Products', icon: PackageIcon, section: 'Stock', mobile: true },
   { to: '/admin/inventory', label: 'Inventory', icon: StackIcon, section: 'Stock', mobile: true },

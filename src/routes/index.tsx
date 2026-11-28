@@ -57,6 +57,29 @@ export const router = createBrowserRouter([
               return { Component: SaleDetailPage };
             },
           },
+          // Step 12c-2c: purchases.
+          {
+            path: 'purchases',
+            lazy: async () => {
+              const { PurchasesPage } = await import('../features/purchases/PurchasesPage');
+              return { Component: PurchasesPage };
+            },
+          },
+          {
+            path: 'purchases/new',
+            lazy: async () => {
+              const { NewPurchasePage } = await import('../features/purchases/NewPurchasePage');
+              return { Component: NewPurchasePage };
+            },
+          },
+          {
+            path: 'purchases/:id',
+            lazy: async () => {
+              const { PurchaseDetailPage } =
+                await import('../features/purchases/PurchaseDetailPage');
+              return { Component: PurchaseDetailPage };
+            },
+          },
           // Step 12c-2a: customers and suppliers, each with its ledger.
           {
             path: 'customers',
